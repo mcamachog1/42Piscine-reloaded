@@ -10,5 +10,4 @@ void	ft_print_alphabet(void)
 		write(1, &letra, 1);
 		letra++;	
 	}
-	write(1, "\n", 1);
 }
