@@ -1,0 +1,86 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_print_combn.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: fiolivei <fiolivei@student.42porto.com>    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/17 16:59:35 by fiolivei          #+#    #+#             */
+/*   Updated: 2025/07/31 09:30:26 by fiolivei         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include <stdio.h>
+#include <unistd.h>
+
+void	ft_putchar(char c)
+{
+	write(1, &c, 1);
+}
+
+void	ft_putnbr(int nb)
+{
+	ft_putchar(nb + '0');
+}
+
+/* The last combination of n digits always have
+	comb[0] == 10 - n, for instance: n=2 => 89; n=3 => 789
+*/
+void	generate_combinations(int nbr_of_digits, int pos, int start_digit,
+		int comb[])
+{
+	int	digit_index;
+	int	_start;
+
+	digit_index = 0;
+	if (pos == nbr_of_digits)
+	{
+		while (digit_index < nbr_of_digits)
+		{
+			ft_putnbr(comb[digit_index]);
+			digit_index++;
+		}
+		if (comb[0] != 10 - nbr_of_digits)
+		{
+			ft_putchar(',');
+			ft_putchar(' ');
+		}
+		return ;
+	}
+	_start = start_digit;
+	while (_start <= 10 - nbr_of_digits + pos)
+	{
+		comb[pos] = _start;
+		generate_combinations(nbr_of_digits, pos + 1, _start + 1, comb);
+		_start++;
+	}
+}
+
+void	ft_print_combn(int n)
+{
+	int	combination[10];
+
+	if (n <= 0 || n >= 10)
+		return ;
+	generate_combinations(n, 0, 0, combination);
+}
+
+int	main(void)
+{
+	ft_print_combn(0);
+	ft_putchar('\n');
+	ft_putchar('\n');
+	ft_print_combn(1);
+	ft_putchar('\n');
+	ft_putchar('\n');
+	ft_print_combn(2);
+	ft_putchar('\n');
+	ft_putchar('\n');
+	ft_print_combn(3);
+	ft_putchar('\n');
+	ft_putchar('\n');
+	ft_print_combn(4);
+	ft_putchar('\n');
+	ft_putchar('\n');
+	return (0);
+}
