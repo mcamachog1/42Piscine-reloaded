@@ -82,5 +82,8 @@ int	main(void)
 	ft_print_combn(4);
 	ft_putchar('\n');
 	ft_putchar('\n');
+	ft_print_combn(5);
+	ft_putchar('\n');
+	ft_putchar('\n');
 	return (0);
 }
