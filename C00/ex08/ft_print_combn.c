@@ -1,159 +1,52 @@
 #include <unistd.h>
-#include <stdlib.h>
-#include <stdio.h>
 
-int	ft_fact(int n)
+void	ft_putchar(char c)
 {
-	int	fact;
-
-	if ( n < 0 )
-		return (0);
-	fact = 1;
-	while ( n > 1 )
-	{
-		fact *= n;
-		n--;
-	}
-	return (fact);
+	write(1, &c, 1);
 }
 
-
-void	ft_putnbr(int nb)
+void	print_combinations(int n, int current_pos, int start_digit, int *combination)
 {
-	long	n;
-
-	n = nb;
-	if (n < 0)
-	{
-		n = -n;
-		write(1, "-", 1);
-	}
-	if (n >= 10)
-		ft_putnbr(n / 10);
-	write(1, &"0123456789"[n % 10], 1);
-}
-
-int	ft_size(int k)
-{
-	int	n;
-	int	size;
-
-	n = 10;
-	size = ft_fact(n) / (ft_fact(n - k) * ft_fact(k));
-	return (size);
-}
-
-int	*ft_combn(int n)
-{
-	int	size;
 	int	i;
-	int	j;
-	int	k;
-	int	*numbers;
-	int	*previous_numbers;
-	int	previous_size;
+	//int	first_number;
 
-	size = ft_size(n);
-	numbers = malloc(size * sizeof(int));
-	printf("pass malloc\n");
-	i = 0;
-	j = 0;
-	if (n == 1)
+	if (current_pos == n)
 	{
-		while (i < size)
+		i = 0;
+		if ( start_digit > n )
+			write(1, ", ", 2);
+		while (i < n)
 		{
-			numbers[i] = i;
+			ft_putchar(combination[i] + '0');
 			i++;
 		}
+		return;
 	}
-	if (n == 2)
+	i = start_digit;
+	while (i <= 9)
 	{
-		previous_size = ft_size(n - 1);
-		previous_numbers = ft_combn(n - 1); 
-		i = 0;
-		while ( i < previous_size )
-		{
-			k = 0;
-			while (k <= 9 && j < size)
-			{
-				if ( k <= previous_numbers[i] )
-					k = previous_numbers[i] + 1;
-				numbers[j] = previous_numbers[i] * 10 + k;
-				k++;
-				j++;
-			}
-			i++;			
-		}
+		combination[current_pos] = i;
+		print_combinations(n, current_pos + 1, i + 1, combination);
+		i++;
 	}
-	return (numbers);
+}
+
+void	ft_print_combn(int n)
+{
+	int combination[10];
+
+	if (n < 1 || n > 9)
+		return;
+	print_combinations(n, 0, 0, combination);
 }
 
 int	main(void)
 {
-	int	*numbers;
-	int	i;
-	int	size;
-	int	n;
-	int	first_number;
-
-	first_number = 1;
-	n = 2;
-	i = 0;
-	size = ft_size(n);
-	printf("size: %d\n", size);
-	numbers = ft_combn(n);
-	printf("pass numbers");
-	while (i < size)
-	{	
-		if (! first_number)
-			write (1, ", ", 2);
-		ft_putnbr(numbers[i]);
-		i++;
-		first_number = 0;	
-	}
-	write (1, "\n", 1);
-	free(numbers);
+	ft_print_combn(1);
+	write(1, "\n\n", 2);
+	ft_print_combn(2);
+	write(1, "\n\n", 2);
+	ft_print_combn(8);
+	write(1, "\n\n", 2);
 	return (0);
 }
-void	ft_print_combn(int n)
-{
-	int	i;
-	int	j;
-	int	m;
-	int	num1;
-	int	num2;
-
-	i = 0;
-	m = 0;
-	if (n > 9 || n < 1)
-	{
-		write(1, "Parameter Error\n", 16);
-		return ; 
-	}
-	while ( i < n )
-	{
-		m = 10 * m + 9;
-		i++;
-	}
-	if (n == 1)
-		ft_putnbr(n);
-	else //if (n == 2)
-	{
-		num1 = 0;
-		while (num1 <= m / 10)
-		{
-			num2 = num1 + 1;
-			while (num2 <= 9)
-			{
-				write(1, ", ", 2);
-				ft_putnbr(num1);
-				ft_putnbr(num2);
-				num2++;
-			}
-			num1++;
-		}
-	}
-}
-
-
-
