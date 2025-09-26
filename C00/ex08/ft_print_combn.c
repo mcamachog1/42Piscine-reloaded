@@ -1,52 +1,75 @@
 #include <unistd.h>
 
-void	ft_putchar(char c)
+int	ft_fact(int n)
 {
-	write(1, &c, 1);
+	int	fact;
+
+	if (n < 0)
+		return (0);
+	fact = 1;
+	while (n > 1)
+	{
+		fact *= n;
+		n--;
+	}
+	return (fact);
 }
 
-void	print_combinations(int n, int current_pos, int start_digit, int *combination)
+void	ft_increment(char *num, int pos, int n)
 {
-	int	i;
-	//int	first_number;
+	int	max_val;
 
-	if (current_pos == n)
+	max_val = (10 - n + pos) + '0';
+	if (num[pos] == max_val)
+		ft_increment(num, pos - 1, n);
+	else
 	{
-		i = 0;
-		if ( start_digit > n )
-			write(1, ", ", 2);
-		while (i < n)
+		num[pos] = num[pos] + 1;
+		pos++;
+		while (pos < n)
 		{
-			ft_putchar(combination[i] + '0');
-			i++;
+			num[pos] = num[pos - 1] + 1;
+			pos++;
 		}
-		return;
-	}
-	i = start_digit;
-	while (i <= 9)
-	{
-		combination[current_pos] = i;
-		print_combinations(n, current_pos + 1, i + 1, combination);
-		i++;
 	}
 }
 
 void	ft_print_combn(int n)
 {
-	int combination[10];
+	char	num[n + 1];
+	int	i;
+	int	numcomb;
 
 	if (n < 1 || n > 9)
-		return;
-	print_combinations(n, 0, 0, combination);
+		return ;
+	i = 0;
+	while (i < n)
+	{
+		num[i] = i + '0';
+		i++;
+	}
+	write(1, num, n);
+	numcomb = ft_fact(10) / (ft_fact(10 - n) * ft_fact(n));
+	while (numcomb-- > 1)
+	{
+		write(1, ", ", 2);
+		ft_increment(num, n - 1, n);
+		write(1, num, n);
+	}
 }
 
-int	main(void)
+/*
+#include <stdlib.h>
+
+int	main(int argc, char *argv[])
 {
-	ft_print_combn(1);
-	write(1, "\n\n", 2);
-	ft_print_combn(2);
-	write(1, "\n\n", 2);
-	ft_print_combn(8);
-	write(1, "\n\n", 2);
-	return (0);
+	int	size;
+
+	if (argc != 2)
+		return (1);
+	size = atoi(argv[1]);
+	ft_print_combn(size);
+	write (1, "\n", 1);
+	return (0);	
 }
+*/
